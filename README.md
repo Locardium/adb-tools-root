@@ -18,9 +18,12 @@ This module automatically enables ADB over Wi-Fi and USB on boot, and provides a
 
 ## Usage
 
-After rebooting, make sure you are on the same Wi-Fi network as your Android device.
+This module is designed to be managed using the **KsuWebUI** app.
 
-Open a web browser and go to:
-`http://<YOUR_DEVICE_IP>:8080`
+1. Download and install a KsuWebUI compatible app (e.g. [KsuWebUI](https://github.com/adivenxnataly/KsuWebUI)).
+2. Open the app, and you will see "ADB Tools Root" in the module list.
+3. Tap on it to open the built-in configuration dashboard.
 
-From there, you can toggle ADB over Wi-Fi/USB and change the port on the fly.
+From there, you can toggle ADB over Wi-Fi/USB, change the port on the fly, and adjust the Keep-Alive loop interval.
+
+*(Fallback)*: If you are not using KsuWebUI, you can still access the dashboard by opening a web browser and navigating to `http://<YOUR_DEVICE_IP>:8080`.
