@@ -87,7 +87,7 @@
 <body>
     <div class="container">
         <h1>ADB Settings</h1>
-        <form action="/cgi-bin/save.sh" method="GET">
+        <form onsubmit="saveSettings(event)">
             <div class="form-group toggle">
                 <input type="checkbox" id="wireless" name="wireless" checked>
                 <label for="wireless" style="margin:0;">Enable Wireless ADB on Boot</label>
@@ -105,6 +105,37 @@
 
             <button type="submit">Save & Apply</button>
         </form>
+        <div id="message" class="message"></div>
     </div>
+
+    <script>
+        async function saveSettings(event) {
+            event.preventDefault();
+            const wireless = document.getElementById('wireless').checked;
+            const usb = document.getElementById('usb').checked;
+            const port = document.getElementById('adb_port').value;
+            const msgBox = document.getElementById('message');
+
+            msgBox.style.display = 'block';
+            msgBox.style.color = '#3b82f6';
+            msgBox.textContent = 'Applying...';
+            
+            // Try KSU WebUI API first
+            if (typeof ksu !== 'undefined' && ksu.exec) {
+                const cmd = `sh /data/adb/modules/adb-tools-root/action.sh save ${wireless} ${usb} ${port}`;
+                await ksu.exec(cmd);
+                msgBox.style.color = '#10b981';
+                msgBox.textContent = 'Settings Applied Successfully (KSU WebUI)';
+            } else if (window.ksu && window.ksu.exec) {
+                const cmd = `sh /data/adb/modules/adb-tools-root/action.sh save ${wireless} ${usb} ${port}`;
+                await window.ksu.exec(cmd);
+                msgBox.style.color = '#10b981';
+                msgBox.textContent = 'Settings Applied Successfully (KSU WebUI)';
+            } else {
+                // Fallback for standard browsers via busybox httpd
+                window.location.href = `/cgi-bin/save.sh?wireless=${wireless ? 'on' : 'off'}&usb=${usb ? 'on' : 'off'}&adb_port=${port}`;
+            }
+        }
+    </script>
 </body>
 </html>

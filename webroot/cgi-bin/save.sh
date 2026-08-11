@@ -35,17 +35,19 @@ echo "WEBUI_PORT=8080" >> "$CONFIG_FILE"
 
 # Apply settings immediately
 if [ "$ENABLE_USB" = "true" ]; then
-    setprop persist.sys.usb.config adb
+    resetprop persist.sys.usb.config adb
 fi
 
 if [ "$ENABLE_WIRELESS" = "true" ]; then
-    setprop service.adb.tcp.port "$ADB_PORT"
+    resetprop service.adb.tcp.port "$ADB_PORT"
 else
-    setprop service.adb.tcp.port -1
+    resetprop service.adb.tcp.port -1
 fi
 
 # Restart ADB Daemon
-setprop ctl.restart adbd
+resetprop ctl.restart adbd
+stop adbd
+start adbd
 
 # Output success page
 cat <<EOF

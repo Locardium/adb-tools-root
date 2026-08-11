@@ -20,18 +20,20 @@ fi
 
 # Apply USB ADB setting
 if [ "$ENABLE_USB_ON_BOOT" = "true" ]; then
-    setprop persist.sys.usb.config adb
+    resetprop persist.sys.usb.config adb
 fi
 
 # Apply Wireless ADB setting
 if [ "$ENABLE_WIRELESS_ON_BOOT" = "true" ]; then
-    setprop service.adb.tcp.port "$ADB_PORT"
+    resetprop service.adb.tcp.port "$ADB_PORT"
 else
-    setprop service.adb.tcp.port -1
+    resetprop service.adb.tcp.port -1
 fi
 
 # Restart adbd to apply changes reliably
-setprop ctl.restart adbd
+resetprop ctl.restart adbd
+stop adbd
+start adbd
 
 # Start the WebUI using busybox httpd
 # Webroot is $MODDIR/webroot
