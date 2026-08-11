@@ -7,7 +7,7 @@ This module automatically enables ADB over Wi-Fi and USB on boot, and provides a
 - Always enable ADB Wireless on boot.
 - Always enable ADB via USB on boot.
 - Custom ADB port (default `5555`).
-- Built-in Web UI accessible on port `8080`.
+- Built-in Web UI.
 
 ## Installation
 

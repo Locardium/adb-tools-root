@@ -1,0 +1,6 @@
+{
+  "version": "v1.0",
+  "versionCode": 1,
+  "zipUrl": "https://github.com/Locardium/adb-tools-root/releases/download/v1.0/adb-tools-root.zip",
+  "changelog": "https://raw.githubusercontent.com/Locardium/adb-tools-root/main/changelog.md"
+}
