@@ -1,0 +1,8 @@
+# Ignore built zip files
+*.zip
+
+# Ignore editor directories
+.idea/
+.vscode/
+*.swp
+.DS_Store

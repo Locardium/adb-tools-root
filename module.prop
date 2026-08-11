@@ -1,0 +1,6 @@
+id=wireless-adb-webui
+name=Wireless ADB & WebUI
+version=v1.0
+versionCode=1
+author=Antigravity
+description=Always enables ADB Wireless on boot with a built-in WebUI (port 8080) for configuration.
