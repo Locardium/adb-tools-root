@@ -30,9 +30,8 @@ else
     setprop service.adb.tcp.port -1
 fi
 
-# Restart adbd to apply changes
-stop adbd
-start adbd
+# Restart adbd to apply changes reliably
+setprop ctl.restart adbd
 
 # Start the WebUI using busybox httpd
 # Webroot is $MODDIR/webroot

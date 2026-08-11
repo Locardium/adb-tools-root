@@ -45,8 +45,7 @@ else
 fi
 
 # Restart ADB Daemon
-stop adbd
-start adbd
+setprop ctl.restart adbd
 
 # Output success page
 cat <<EOF
