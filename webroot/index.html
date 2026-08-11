@@ -103,6 +103,11 @@
                 <label for="usb" style="margin:0;">Enable USB ADB on Boot</label>
             </div>
 
+            <div class="form-group">
+                <label for="loop_interval">Keep-Alive Loop Interval (seconds)</label>
+                <input type="number" id="loop_interval" name="loop_interval" value="5" min="1" max="300" required>
+            </div>
+
             <button type="submit">Save & Apply</button>
         </form>
         <div id="message" class="message"></div>
@@ -114,6 +119,7 @@
             const wireless = document.getElementById('wireless').checked;
             const usb = document.getElementById('usb').checked;
             const port = document.getElementById('adb_port').value;
+            const loop = document.getElementById('loop_interval').value;
             const msgBox = document.getElementById('message');
 
             msgBox.style.display = 'block';
@@ -122,18 +128,18 @@
             
             // Try KSU WebUI API first
             if (typeof ksu !== 'undefined' && ksu.exec) {
-                const cmd = `sh /data/adb/modules/adb-tools-root/action.sh save ${wireless} ${usb} ${port}`;
+                const cmd = `sh /data/adb/modules/adb-tools-root/action.sh save ${wireless} ${usb} ${port} ${loop}`;
                 await ksu.exec(cmd);
                 msgBox.style.color = '#10b981';
                 msgBox.textContent = 'Settings Applied Successfully (KSU WebUI)';
             } else if (window.ksu && window.ksu.exec) {
-                const cmd = `sh /data/adb/modules/adb-tools-root/action.sh save ${wireless} ${usb} ${port}`;
+                const cmd = `sh /data/adb/modules/adb-tools-root/action.sh save ${wireless} ${usb} ${port} ${loop}`;
                 await window.ksu.exec(cmd);
                 msgBox.style.color = '#10b981';
                 msgBox.textContent = 'Settings Applied Successfully (KSU WebUI)';
             } else {
                 // Fallback for standard browsers via busybox httpd
-                window.location.href = `/cgi-bin/save.sh?wireless=${wireless ? 'on' : 'off'}&usb=${usb ? 'on' : 'off'}&adb_port=${port}`;
+                window.location.href = `/cgi-bin/save.sh?wireless=${wireless ? 'on' : 'off'}&usb=${usb ? 'on' : 'off'}&adb_port=${port}&loop_interval=${loop}`;
             }
         }
     </script>

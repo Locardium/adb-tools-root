@@ -4,10 +4,11 @@
 echo "Content-type: text/html"
 echo ""
 
-# Parse QUERY_STRING (e.g., wireless=on&adb_port=5555&usb=on)
+# Parse QUERY_STRING 
 ENABLE_WIRELESS="false"
 ENABLE_USB="false"
 ADB_PORT="5555"
+LOOP_INTERVAL="5"
 
 case "$QUERY_STRING" in
     *wireless=on*) ENABLE_WIRELESS="true" ;;
@@ -17,23 +18,26 @@ case "$QUERY_STRING" in
     *usb=on*) ENABLE_USB="true" ;;
 esac
 
-# Extract adb_port securely using sed or grep
 port=$(echo "$QUERY_STRING" | grep -o 'adb_port=[0-9]*' | cut -d'=' -f2)
 if [ ! -z "$port" ]; then
     ADB_PORT="$port"
 fi
 
-MODDIR="/data/adb/modules/wireless-adb-webui"
+loop=$(echo "$QUERY_STRING" | grep -o 'loop_interval=[0-9]*' | cut -d'=' -f2)
+if [ ! -z "$loop" ]; then
+    LOOP_INTERVAL="$loop"
+fi
+
+MODDIR="/data/adb/modules/adb-tools-root"
 CONFIG_FILE="$MODDIR/system/etc/adb_webui/config.prop"
 
-# Save configuration to file
 mkdir -p $(dirname "$CONFIG_FILE")
 echo "ENABLE_WIRELESS_ON_BOOT=$ENABLE_WIRELESS" > "$CONFIG_FILE"
 echo "ENABLE_USB_ON_BOOT=$ENABLE_USB" >> "$CONFIG_FILE"
 echo "ADB_PORT=$ADB_PORT" >> "$CONFIG_FILE"
 echo "WEBUI_PORT=8080" >> "$CONFIG_FILE"
+echo "LOOP_INTERVAL=$LOOP_INTERVAL" >> "$CONFIG_FILE"
 
-# Apply settings immediately
 if [ "$ENABLE_USB" = "true" ]; then
     resetprop persist.sys.usb.config adb
 fi
@@ -44,12 +48,10 @@ else
     resetprop service.adb.tcp.port -1
 fi
 
-# Restart ADB Daemon
 resetprop ctl.restart adbd
 stop adbd
 start adbd
 
-# Output success page
 cat <<EOF
 <!DOCTYPE html>
 <html>
